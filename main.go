@@ -22,7 +22,7 @@ const (
 	DefaultExpires  = 86400
 	ExitCodeError   = 111
 	UnlockLUAScript = "if redis.call(\"get\",KEYS[1]) == ARGV[1]\nthen\nreturn redis.call(\"del\",KEYS[1])\nelse\nreturn 0\nend\n"
-	Version         = "0.0.1"
+	Version         = "0.0.1.1"
 	RetryInterval   = time.Duration(500) * time.Millisecond
 )
 
@@ -56,7 +56,7 @@ func parseOptions() (opt *Options, key string, program string, args []string) {
 	var showVersion bool
 
 	flag.Usage = usage
-	flag.StringVar(&redis, "redis", "127.0.0.1:6379", "redis-server host:port")
+	flag.StringVar(&redis, "redis", "127.0.0.1:6379", "redis-server host:port or unix:/var/run/redis/redis.sock")
 	flag.IntVar(&expires, "expires", DefaultExpires, "The lock will be auto-released after the expire time is reached.")
 	flag.BoolVar(&keep, "keep", false, "Keep the lock after invoked command exited.")
 	flag.BoolVar(&noDelay, "n", false, "No delay. If KEY is locked by another process, go-redis-setlock gives up.")
@@ -135,7 +135,13 @@ func connectToRedisServer(opt *Options) (c *redis.Client, err error) {
 	}
 	start := time.Now()
 	for {
-		c, err = redis.DialTimeout("tcp", opt.Redis, time.Duration(timeout)*time.Second)
+		prot := "tcp"
+		server := opt.Redis
+		if ("unix:" == server[:5]) {
+			prot = "unix"
+			server =  server[5:]
+		}
+		c, err = redis.DialTimeout(prot, server, time.Duration(timeout)*time.Second)
 		if err == nil {
 			break
 		}
