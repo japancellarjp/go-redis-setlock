@@ -10,13 +10,13 @@ go-redis-setlock -redis unix:/var/run/redis/redis.sock sleep 3
 
 ## Repository
 
-[github.com/sreinfrasystemjp/go-redis-setlock](https://github.com/sreinfrasystemjp/go-redis-setlock)
+[github.com/japancellarjp/go-redis-setlock](https://github.com/japancellarjp/go-redis-setlock)
 
 
 ## Build
 
 ```
-git clone https://github.com/sreinfrasystemjp/go-redis-setlock.git
+git clone https://github.com/japancellarjp/go-redis-setlock.git
 
 docker pull golang:1.12.5-stretch
 docker run --rm -it \
@@ -31,7 +31,7 @@ golang:1.12.5-stretch \
 
 ## Getting binary
 
-* [bin/linux-amd64/go-redis-setlock](https://github.com/sreinfrasystemjp/go-redis-setlock/blob/master/bin/linux-amd64/go-redis-setlock)
+* [bin/linux-amd64/go-redis-setlock](https://github.com/japancellarjp/go-redis-setlock/blob/master/bin/linux-amd64/go-redis-setlock)
 
 ## Usage
 
